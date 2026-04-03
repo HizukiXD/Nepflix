@@ -3,6 +3,9 @@ import 'movie_detail_screen.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
 import 'profile_screen.dart';
+import 'all_movies_screen.dart';
+import 'top_rated_movies_screen.dart';
+import 'popular_movies_screen.dart';
 import 'dart:async';
 
 class FirstScreen extends StatefulWidget {
@@ -23,6 +26,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/KZiwCrGUZNk/maxresdefault.jpg',
       'description': 'Comedy adventures of Jerry.',
+      'youtubeId': 'KZiwCrGUZNk',
     },
     {
       'title': 'Aama',
@@ -33,6 +37,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/RRv_IJSQweM/maxresdefault.jpg',
       'description': 'Emotional mother-son story.',
+      'youtubeId': 'RRv_IJSQweM',
     },
     {
       'title': 'Laaj Sharanam',
@@ -43,6 +48,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/48-rWlGPeVc/sddefault.jpg',
       'description': 'Action and justice story.',
+      'youtubeId': '48-rWlGPeVc',
     },
     {
       'title': 'Jaari',
@@ -53,6 +59,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/5O3K8JXch1E/maxresdefault.jpg',
       'description': 'Supernatural horror.',
+      'youtubeId': '5O3K8JXch1E',
     },
     {
       'title': 'Unko Sweater',
@@ -63,6 +70,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/hWZQ0kaTbXU/maxresdefault.jpg',
       'description': 'Comedy and friendship story.',
+      'youtubeId': 'hWZQ0kaTbXU',
     },
     {
       'title': 'Kalo Pothi',
@@ -73,6 +81,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/74gClGeD5D8/sddefault.jpg',
       'description': 'Dark drama.',
+      'youtubeId': '74gClGeD5D8',
     },
     {
       'title': 'Kabaddi Kabaddi 4',
@@ -83,6 +92,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/zOJwj88rQuE/maxresdefault.jpg',
       'description': 'Sports drama.',
+      'youtubeId': 'zOJwj88rQuE',
     },
     {
       'title': 'Talakjung vs Tulke',
@@ -93,6 +103,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/Zl-JXV0JTzw/hq720.jpg',
       'description': 'Comedy battle.',
+      'youtubeId': 'Zl-JXV0JTzw',
     },
     {
       'title': 'Pashupati Prasad',
@@ -103,6 +114,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/xGOIMWh2FfE/maxresdefault.jpg',
       'description': 'Satirical comedy.',
+      'youtubeId': 'xGOIMWh2FfE',
     },
     {
       'title': 'Loot',
@@ -113,6 +125,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/oRjjJ5LkGPY/maxresdefault.jpg',
       'description': 'Heist thriller.',
+      'youtubeId': 'oRjjJ5LkGPY',
     },
     {
       'title': 'Loot 2',
@@ -123,6 +136,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/oRjjJ5LkGPY/maxresdefault.jpg',
       'description': 'Heist thriller sequel.',
+      'youtubeId': 'oRjjJ5LkGPY',
     },
     
     // New Nepali Movies Added
@@ -135,6 +149,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/Sv54RX3Hv5Q/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBJjixfS8uBYDAaszQ-rQ4W9Ukk5A',
       'description': 'Chhadke is a Nepalese film that tells the story of two best friends who had dreams to fulfill when they grew up, but time and destiny seem to have other plans.',
+      'youtubeId': 'Sv54RX3Hv5Q',
     },
     {
       'title': 'Prem Geet',
@@ -145,6 +160,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/7uzbmUrT8Tg/maxresdefault.jpg',
       'description': 'A beautiful romantic story set in the hills of Nepal.',
+      'youtubeId': '7uzbmUrT8Tg',
     },
     {
       'title': 'Prem Geet 2',
@@ -155,6 +171,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/SSMUBhsxICo/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAFiA1FTyzKvxl9yka4-A3LK6_bVw',
       'description': 'The sequel to the hit romantic drama.',
+      'youtubeId': 'SSMUBhsxICo',
     },
     {
       'title': 'Chhakka Panja',
@@ -165,6 +182,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/u5NJUF-M6pc/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD9U6vW6Yy1AHEoP0GM1XHdn8A41w',
       'description': 'A hilarious comedy about friendship and relationships.',
+      'youtubeId': 'u5NJUF-M6pc',
     },
     {
       'title': 'Chhakka Panja 2',
@@ -175,6 +193,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/q1BzJ6na4Nc/maxresdefault.jpg',
       'description': 'The blockbuster comedy sequel.',
+      'youtubeId': 'q1BzJ6na4Nc',
     },
     {
       'title': 'Chhakka Panja 3',
@@ -185,6 +204,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlwTvBsW8h2RcsEAoXQ5O0qGlV4ikZD5Kww&s',
       'description': 'The third installment of the hit comedy series.',
+      'youtubeId': 'bl8CEwqC2Wo',
     },
     {
       'title': 'Nai Nabhannu La 2',
@@ -195,6 +215,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://m.media-amazon.com/images/M/MV5BMjliN2U3NDItYzVlOC00NDc4LTg5MmItNzkzZjQzNWNjYWVhXkEyXkFqcGc@._V1_.jpg',
       'description': 'A Drama about love and misunderstandings.',
+      'youtubeId': 'aRoObj9rnn0',
     },
     {
       'title': 'Kri',
@@ -205,6 +226,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/aRoObj9rnn0/maxresdefault.jpg',
       'description': 'Action-packed thriller with a strong message.',
+      'youtubeId': 'aRoObj9rnn0',
     },
     {
       'title': 'Jhola',
@@ -215,6 +237,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/DnbxfA3xVaY/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLB1kLFa6-L5KxHwJD7z-75EU6BlVQ',
       'description': 'A powerful drama about social issues in Nepal.',
+      'youtubeId': 'DnbxfA3xVaY',
     },
     {
       'title': 'Seto Surya',
@@ -225,6 +248,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/3ZmAKH60Y0g/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD3xwOoiSBaUiQ2x1OrlCoFSmlSaQ',
       'description': 'A poignant drama about the aftermath of civil war.',
+      'youtubeId': '3ZmAKH60Y0g',
     },
     {
       'title': 'Gopi',
@@ -235,6 +259,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/2AN88_StD0w/maxresdefault.jpg',
       'description': 'A light-hearted comedy about village life.',
+      'youtubeId': '2AN88_StD0w',
     },
     {
       'title': 'Suntali',
@@ -245,6 +270,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://m.media-amazon.com/images/M/MV5BMmUzMGNmNTEtNWJmMy00YjU3LTgzMzQtZjljYTVkMTc2YTM3XkEyXkFqcGc@._V1_.jpg',
       'description': 'A comedy about a young woman\'s journey.',
+      'youtubeId': 'fCfhY0E4GRo',
     },
     {
       'title': 'Mero Euta Saathi Chha',
@@ -255,6 +281,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://m.media-amazon.com/images/M/MV5BZjEzNTFjZTQtNjI5Zi00Njk5LTkxOGItYzhjNGMwMTI5NDFkXkEyXkFqcGc@._V1_QL75_UX337_.jpg',
       'description': 'A touching love story set in modern Nepal.',
+      'youtubeId': 'Uj8d504RYC4',
     },
     {
       'title': 'Kabbadi',
@@ -265,6 +292,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/fCfhY0E4GRo/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLANT6KYDDGlzeugb5d5HaHmpLYv2A',
       'description': 'The first movie in the popular Kabbadi series about love and comedy.',
+      'youtubeId': 'fCfhY0E4GRo',
     },
     {
       'title': 'Kabbadi 2',
@@ -275,6 +303,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/Uj8d504RYC4/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDDFu8Tf9uDGnL2CC8L8w7BXKvz7Q',
       'description': 'The sequel to the hit comedy love drama.',
+      'youtubeId': 'Uj8d504RYC4',
     },
     {
       'title': 'Kabbadi 3',
@@ -285,6 +314,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/bl8CEwqC2Wo/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBNXPXhAkJ8-zV5dmXkRGva3YNpnQ',
       'description': 'The third installment of the Kabbadi franchise.',
+      'youtubeId': 'bl8CEwqC2Wo',
     },
     {
       'title': 'Kabbadi 4',
@@ -295,6 +325,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/zOJwj88rQuE/maxresdefault.jpg',
       'description': 'After the events of Kabaddi 3, Kaji now doesn\'t seek love as he is suffering from the pain of his previous relationships.',
+      'youtubeId': 'zOJwj88rQuE',
     },
     {
       'title': 'Prasad',
@@ -305,6 +336,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/_3HkoreYzWQ/maxresdefault.jpg',
       'description': 'A thought-provoking drama about life and spirituality.',
+      'youtubeId': '_3HkoreYzWQ',
     },
     {
       'title': 'Dhanapati',
@@ -315,6 +347,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/80zKdSyEQok/maxresdefault.jpg',
       'description': 'A powerful story about corruption and redemption.',
+      'youtubeId': '80zKdSyEQok',
     },
     {
       'title': 'Captain',
@@ -325,6 +358,7 @@ class FirstScreen extends StatefulWidget {
       'detailImage':
           'https://i.ytimg.com/vi/cEWA3hm_M0g/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAifTb2Vq7ZsD86aG0-kdjsh0Vzrg',
       'description': 'The film focuses on the emotional journey and football career of the lead character, aiming for personal redemption and national recognition.',
+      'youtubeId': 'cEWA3hm_M0g',
     },
   ];
 
@@ -368,7 +402,7 @@ class _FirstScreenState extends State<FirstScreen> {
   Map<String, String>? _loggedInUser;
   
   // Wishlist tracking - stores movie titles
-  Set<String> _wishlist = {};
+  final Set<String> _wishlist = {};
   
   // Timer for auto-slide
   Timer? _autoSlideTimer;
@@ -652,6 +686,21 @@ class _FirstScreenState extends State<FirstScreen> {
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
+              // Recommendation Movie Title
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Recommendation',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+
               // Banner
               SizedBox(
                 height: 300,
@@ -881,14 +930,14 @@ class _FirstScreenState extends State<FirstScreen> {
                   ),
                 ),
               const SizedBox(height: 20),
-              sectionTitle(context, "Top Rated Movies (${FirstScreen.topRatedMovies.length})"),
-              movieList(FirstScreen.topRatedMovies),
+              sectionTitle(context, "Top Rated Movies (${FirstScreen.topRatedMovies.take(6).length})"),
+              movieList(FirstScreen.topRatedMovies.take(6).toList()),
               const SizedBox(height: 20),
-              sectionTitle(context, "Popular Movies (${FirstScreen.popularMovies.length})"),
-              movieList(FirstScreen.popularMovies),
+              sectionTitle(context, "Popular Movies (${FirstScreen.popularMovies.take(6).length})"),
+              movieList(FirstScreen.popularMovies.take(6).toList()),
               const SizedBox(height: 20),
-              sectionTitle(context, "All Movies (${FirstScreen.allMovies.length})"),
-              movieList(FirstScreen.allMovies),
+              sectionTitle(context, "All Movies (${FirstScreen.allMovies.take(6).length})"),
+              movieList(FirstScreen.allMovies.take(6).toList()),
             ],
           ),
         ),
@@ -1009,7 +1058,16 @@ class _FirstScreenState extends State<FirstScreen> {
             label: 'Top Rated Movies',
             onTap: () {
               Navigator.pop(context);
-              _showMoviesDialog('Top Rated Movies', FirstScreen.topRatedMovies);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TopRatedMoviesScreen(
+                    userData: _loggedInUser,
+                    wishlist: _wishlist,
+                    onWishlistToggle: toggleWishlist,
+                  ),
+                ),
+              );
             },
           ),
           _drawerMenuItem(
@@ -1017,7 +1075,16 @@ class _FirstScreenState extends State<FirstScreen> {
             label: 'Popular Movies',
             onTap: () {
               Navigator.pop(context);
-              _showMoviesDialog('Popular Movies', FirstScreen.popularMovies);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PopularMoviesScreen(
+                    userData: _loggedInUser,
+                    wishlist: _wishlist,
+                    onWishlistToggle: toggleWishlist,
+                  ),
+                ),
+              );
             },
           ),
           _drawerMenuItem(
@@ -1025,7 +1092,16 @@ class _FirstScreenState extends State<FirstScreen> {
             label: 'All Movies',
             onTap: () {
               Navigator.pop(context);
-              _showMoviesDialog('All Movies (${FirstScreen.allMovies.length})', FirstScreen.allMovies);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AllMoviesScreen(
+                    userData: _loggedInUser,
+                    wishlist: _wishlist,
+                    onWishlistToggle: toggleWishlist,
+                  ),
+                ),
+              );
             },
           ),
           
@@ -1345,16 +1421,6 @@ class _FirstScreenState extends State<FirstScreen> {
     );
   }
 
-  void _showComingSoon(String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$feature feature coming soon!'),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
   void _showAboutDialog() {
     showDialog(
       context: context,
@@ -1395,11 +1461,38 @@ class _FirstScreenState extends State<FirstScreen> {
           TextButton(
             onPressed: () {
               if (title.contains('Top Rated')) {
-                _showMoviesDialog(title, FirstScreen.topRatedMovies);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TopRatedMoviesScreen(
+                      userData: _loggedInUser,
+                      wishlist: _wishlist,
+                      onWishlistToggle: toggleWishlist,
+                    ),
+                  ),
+                );
               } else if (title.contains('Popular')) {
-                _showMoviesDialog(title, FirstScreen.popularMovies);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PopularMoviesScreen(
+                      userData: _loggedInUser,
+                      wishlist: _wishlist,
+                      onWishlistToggle: toggleWishlist,
+                    ),
+                  ),
+                );
               } else if (title.contains('All Movies')) {
-                _showMoviesDialog(title, FirstScreen.allMovies);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AllMoviesScreen(
+                      userData: _loggedInUser,
+                      wishlist: _wishlist,
+                      onWishlistToggle: toggleWishlist,
+                    ),
+                  ),
+                );
               }
             },
             child: const Text(
@@ -1502,34 +1595,6 @@ class MovieCard extends StatelessWidget {
                         ),
                       );
                     },
-                  ),
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.7),
-                            Colors.transparent,
-                          ],
-                        ),
-                      ),
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.8),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.play_arrow,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),

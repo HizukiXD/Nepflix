@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'first_screen.dart';
+import 'video_player_screen.dart';
 
 class MovieDetailScreen extends StatefulWidget {
   final Map<String, String> movie;
@@ -239,6 +240,47 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   height: 1.6,
                 ),
               ),
+
+              const SizedBox(height: 24),
+
+              // Watch Trailer Button
+              if (widget.movie['youtubeId'] != null && widget.movie['youtubeId']!.isNotEmpty)
+                Center(
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VideoPlayerScreen(
+                            videoId: widget.movie['youtubeId']!,
+                            title: widget.movie['title'] ?? 'Trailer',
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.play_circle_fill,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                    label: const Text(
+                      'Watch Trailer',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      elevation: 5,
+                    ),
+                  ),
+                ),
 
               const SizedBox(height: 30),
 
