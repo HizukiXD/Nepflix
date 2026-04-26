@@ -1,28 +1,61 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
-  static const String baseUrl = "http://10.0.2.2:5000"; // use your PC IP if on phone
+  static final String baseUrl = dotenv.env['BACKEND_URL'] ?? "http://10.0.2.2:5000"; // use your PC IP if on phone
 
   // ========== Auth ==========
   static Future login(String email, String password) async {
     var url = Uri.parse("$baseUrl/api/auth/login");
-    var response = await http.post(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"email": email, "password": password}),
-    );
-    return jsonDecode(response.body);
+    try {
+      var response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"email": email, "password": password}),
+      );
+      
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {
+          'success': false,
+          'message': 'Login failed: ${response.statusCode}',
+          'error': response.body,
+        };
+      }
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'Connection error: $e',
+      };
+    }
   }
 
   static Future register(String name, String email, String password) async {
     var url = Uri.parse("$baseUrl/api/auth/register");
-    var response = await http.post(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"name": name, "email": email, "password": password}),
-    );
-    return jsonDecode(response.body);
+    try {
+      var response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"name": name, "email": email, "password": password}),
+      );
+      
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else {
+        return {
+          'success': false,
+          'message': 'Registration failed: ${response.statusCode}',
+          'error': response.body,
+        };
+      }
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'Connection error: $e',
+      };
+    }
   }
 
   // ========== Movies ==========

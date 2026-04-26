@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final Map<String, String>? userData;
+  final Map<String, String> userData;
+  final VoidCallback onShowWishlist;
 
-  const ProfileScreen({super.key, this.userData});
+  const ProfileScreen({super.key, required this.userData, required this.onShowWishlist});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -19,22 +20,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Check if user is logged in
-    if (widget.userData == null || widget.userData!['isLoggedIn'] != 'true') {
-      // Not logged in, show error and go back
-      Future.delayed(const Duration(milliseconds: 100), () {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please login to access your profile'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      });
-    }
-    
-    username = widget.userData?['username'] ?? 'Guest User';
-    email = widget.userData?['email'] ?? 'user@example.com';
+    username = widget.userData['username'] ?? 'Guest User';
+    email = widget.userData['email'] ?? 'user@example.com';
     _usernameController = TextEditingController(text: username);
     _emailController = TextEditingController(text: email);
   }
@@ -306,15 +293,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: Icons.bookmark,
                     title: 'My Watchlist',
                     subtitle: 'Movies you want to watch',
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Watchlist feature coming soon!'),
-                          backgroundColor: Colors.blue,
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    },
+                    onTap: widget.onShowWishlist,
                   ),
 
                   // Watch History

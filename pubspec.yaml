@@ -30,14 +30,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
  # ADD THIS TO ENABLE HTTP REQUESTS
   http: ^0.13.6
+  shared_preferences: ^2.2.2
   # ADD THIS TO PLAY YOUTUBE VIDEOS
   youtube_player_flutter: ^9.1.3
+  flutter_dotenv: ^6.0.0
   
 dev_dependencies:
   flutter_test:
@@ -67,3 +68,5 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/.env

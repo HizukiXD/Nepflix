@@ -7,6 +7,10 @@ import 'all_movies_screen.dart';
 import 'top_rated_movies_screen.dart';
 import 'popular_movies_screen.dart';
 import 'dart:async';
+import 'services/auth_service.dart';
+import 'widgets/movie_rating_badge.dart';
+
+
 
 class FirstScreen extends StatefulWidget {
   const FirstScreen({super.key});
@@ -411,6 +415,23 @@ class _FirstScreenState extends State<FirstScreen> {
   void initState() {
     super.initState();
     startAutoSlide();
+    _checkLoginStatus();
+  }
+
+  void _checkLoginStatus() async {
+    final user = await AuthService.getUser();
+    final token = await AuthService.getToken();
+    if (user != null && token != null) {
+      if (mounted) {
+        setState(() {
+          _loggedInUser = {
+            'username': user['username']?.toString() ?? '',
+            'email': user['email']?.toString() ?? '',
+            'token': token,
+          };
+        });
+      }
+    }
   }
 
   @override
@@ -577,16 +598,14 @@ class _FirstScreenState extends State<FirstScreen> {
                             children: [
                               const Icon(Icons.star, color: Colors.yellow, size: 12),
                               const SizedBox(width: 3),
-                              Text(
-                                movie['rating'] ?? 'N/A',
-                                style: const TextStyle(
-                                  color: Colors.yellow,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              MovieRatingBadge(
+                                movieTitle: movie['title'] ?? '',
+                                initialRating: movie['rating'],
+                                fontSize: 11,
                               ),
                             ],
                           ),
+
                         ],
                       ),
                     );
@@ -909,16 +928,14 @@ class _FirstScreenState extends State<FirstScreen> {
                                         children: [
                                           const Icon(Icons.star, color: Colors.yellow, size: 14),
                                           const SizedBox(width: 3),
-                                          Text(
-                                            movie['rating'] ?? 'N/A',
-                                            style: const TextStyle(
-                                              color: Colors.yellow,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                          MovieRatingBadge(
+                                            movieTitle: movie['title'] ?? '',
+                                            initialRating: movie['rating'],
+                                            fontSize: 12,
                                           ),
                                         ],
                                       ),
+
                                     ],
                                   ),
                                 ),
@@ -1159,11 +1176,12 @@ class _FirstScreenState extends State<FirstScreen> {
           const Divider(color: Colors.white24, height: 16),
           
           // Account Section
-          _drawerMenuItem(
-            icon: Icons.login,
-            label: 'Login',
-            onTap: () {
-              Navigator.pop(context);
+          if (_loggedInUser == null)
+            _drawerMenuItem(
+              icon: Icons.login,
+              label: 'Login',
+              onTap: () {
+                Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -1181,15 +1199,26 @@ class _FirstScreenState extends State<FirstScreen> {
                       duration: const Duration(seconds: 2),
                     ),
                   );
+                  // Automatically open ProfileScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(
+                        userData: _loggedInUser!,
+                        onShowWishlist: _showWishlistDialog,
+                      ),
+                    ),
+                  );
                 }
               });
             },
           ),
-          _drawerMenuItem(
-            icon: Icons.app_registration,
-            label: 'Sign Up',
-            onTap: () {
-              Navigator.pop(context);
+          if (_loggedInUser == null)
+            _drawerMenuItem(
+              icon: Icons.app_registration,
+              label: 'Sign Up',
+              onTap: () {
+                Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -1207,6 +1236,16 @@ class _FirstScreenState extends State<FirstScreen> {
                       duration: const Duration(seconds: 2),
                     ),
                   );
+                  // Automatically open ProfileScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(
+                        userData: _loggedInUser!,
+                        onShowWishlist: _showWishlistDialog,
+                      ),
+                    ),
+                  );
                 }
               });
             },
@@ -1221,7 +1260,10 @@ class _FirstScreenState extends State<FirstScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfileScreen(userData: _loggedInUser),
+                    builder: (context) => ProfileScreen(
+                      userData: _loggedInUser!,
+                      onShowWishlist: _showWishlistDialog,
+                    ),
                   ),
                 ).then((result) {
                   if (result != null && result is Map<String, String>) {
@@ -1431,7 +1473,7 @@ class _FirstScreenState extends State<FirstScreen> {
           style: TextStyle(color: Colors.red, fontSize: 20),
         ),
         content: const Text(
-          'NepFlix v1.0.0\n\nYour favorite movie streaming app featuring the best Nepali movies.\n\nDeveloped with Flutter\n\nTotal Movies: 31+ Nepali Movies',
+          'NepFlix v1.0.0\n\nYour favorite movie streaming app featuring the best Nepali movies.\n\nDeveloped by Suraj Chandra Shrestha & Anmol Tamang\n\nTotal Movies: 31+ Nepali Movies',
           style: TextStyle(color: Colors.white70),
         ),
         actions: [
@@ -1616,15 +1658,13 @@ class MovieCard extends StatelessWidget {
             children: [
               const Icon(Icons.star, color: Colors.yellow, size: 12),
               const SizedBox(width: 3),
-              Text(
-                movie['rating'] ?? 'N/A',
-                style: const TextStyle(
-                  color: Colors.yellow,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                ),
+              MovieRatingBadge(
+                movieTitle: movie['title'] ?? '',
+                initialRating: movie['rating'],
+                fontSize: 11,
               ),
               const SizedBox(width: 8),
+
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                 decoration: BoxDecoration(
@@ -1792,11 +1832,13 @@ class _SearchDialogState extends State<SearchDialog> {
                             const Icon(Icons.star,
                                 color: Colors.yellow, size: 14),
                             const SizedBox(width: 4),
-                            Text(
-                              movie['rating'] ?? 'N/A',
-                              style: const TextStyle(color: Colors.white70),
+                            MovieRatingBadge(
+                              movieTitle: movie['title'] ?? '',
+                              initialRating: movie['rating'],
+                              fontSize: 12,
                             ),
                             const SizedBox(width: 8),
+
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                               decoration: BoxDecoration(
@@ -1832,3 +1874,4 @@ class _SearchDialogState extends State<SearchDialog> {
     );
   }
 }
+

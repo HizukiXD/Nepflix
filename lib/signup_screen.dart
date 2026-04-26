@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
-
-// Global user registry (in-memory, shared across screens)
-Map<String, Map<String, String>> registeredUsers = {};
+import 'services/api_services.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -12,7 +10,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -22,75 +20,77 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void _signup() {
-    // Validation
-    if (_nameController.text.isEmpty) {
-      _showError('Please enter your name');
-      return;
-    }
-    if (_emailController.text.isEmpty) {
-      _showError('Please enter your email');
-      return;
-    }
-    if (!_emailController.text.contains('@')) {
-      _showError('Please enter a valid email');
-      return;
-    }
-    if (registeredUsers.containsKey(_emailController.text)) {
-      _showError('Email already registered. Please login instead.');
-      return;
-    }
-    if (_passwordController.text.isEmpty) {
-      _showError('Please enter a password');
-      return;
-    }
-    if (_passwordController.text.length < 6) {
-      _showError('Password must be at least 6 characters');
-      return;
-    }
-    if (_passwordController.text != _confirmPasswordController.text) {
-      _showError('Passwords do not match');
-      return;
-    }
-    if (!_agreeToTerms) {
-      _showError('Please agree to the terms and conditions');
-      return;
-    }
-
-    // Save user
-    registeredUsers[_emailController.text] = {
-      'name': _nameController.text,
-      'email': _emailController.text,
-      'password': _passwordController.text,
-      'username': _nameController.text.split(' ')[0].toLowerCase(),
-    };
-
-    // Show success message
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Account created successfully! You are now logged in.'),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 1),
-      ),
-    );
-
-    // Auto-login after signup
-    Future.delayed(const Duration(seconds: 1), () {
-      Navigator.pop(context, {
-        'username': _nameController.text,
-        'email': _emailController.text,
-        'isLoggedIn': 'true',
-      });
-    });
+void _signup() async {
+  // Validation (same as your code)
+  if (_usernameController.text.isEmpty) {
+    _showError('Please enter a username');
+    return;
+  }
+  if (_emailController.text.isEmpty) {
+    _showError('Please enter your email');
+    return;
+  }
+  if (!_emailController.text.contains('@')) {
+    _showError('Please enter a valid email');
+    return;
+  }
+  if (_passwordController.text.isEmpty) {
+    _showError('Please enter a password');
+    return;
+  }
+  if (_passwordController.text.length < 6) {
+    _showError('Password must be at least 6 characters');
+    return;
+  }
+  if (_passwordController.text != _confirmPasswordController.text) {
+    _showError('Passwords do not match');
+    return;
+  }
+  if (!_agreeToTerms) {
+    _showError('Please agree to the terms and conditions');
+    return;
   }
 
+  try {
+    final response = await ApiService.register(
+      _usernameController.text,
+      _emailController.text,
+      _passwordController.text,
+    );
+
+    if (response['success'] == true || response['token'] != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Account created successfully! Please login with your email and password.'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          ),
+        );
+      });
+    } else {
+      _showError(response['message'] ?? 'Signup failed');
+    }
+
+  } catch (e) {
+    _showError('Network error. Please try again.');
+    print(e);
+  }
+}
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -159,12 +159,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 40),
 
-              // Name Field
+              // Username Field
               TextField(
-                controller: _nameController,
+                controller: _usernameController,
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                  hintText: 'Full Name',
+                  hintText: 'Username',
                   hintStyle: const TextStyle(color: Colors.white54),
                   prefixIcon: const Icon(Icons.person, color: Colors.red),
                   filled: true,
@@ -342,7 +342,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: _signup,
+                  onPressed: _signup, // on clicked function 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
@@ -405,7 +405,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       );
                     },
                     child: const Text(
-                      'Sign In',
+                      'Login',
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,

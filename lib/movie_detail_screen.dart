@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'first_screen.dart';
 import 'video_player_screen.dart';
+import 'rating_comment_system.dart';
+import 'services/rating_service.dart';
+import 'widgets/movie_rating_badge.dart';
+
 
 class MovieDetailScreen extends StatefulWidget {
   final Map<String, String> movie;
@@ -22,16 +26,69 @@ class MovieDetailScreen extends StatefulWidget {
 
 class _MovieDetailScreenState extends State<MovieDetailScreen> {
   late bool _isInWishlist;
+  double _averageRating = 0.0;
+  double _userRating = 0.0;
+  bool _isRatingLoading = true;
 
   @override
   void initState() {
     super.initState();
     _isInWishlist = widget.isInWishlist;
+    _fetchRatings();
+  }
+
+  Future<void> _fetchRatings() async {
+    if (!mounted) return;
+    setState(() => _isRatingLoading = true);
+
+    try {
+      final movieTitle = widget.movie['title'] ?? '';
+      
+      // Fetch average rating
+      final avgResponse = await RatingService.getAverageRating(movieTitle);
+      
+      // Fetch user rating if logged in
+      double userRating = 0.0;
+      if (widget.userData != null && widget.userData!['token'] != null) {
+        final userResponse = await RatingService.getUserRating(
+          movieTitle: movieTitle,
+          userId: widget.userData?['email'] ?? widget.userData?['username'] ?? '',
+          token: widget.userData!['token']!,
+        );
+        if (userResponse['rating'] != null) {
+          userRating = (userResponse['rating']['rating'] ?? 0.0).toDouble();
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          _averageRating = (avgResponse['averageRating'] ?? 0.0).toDouble();
+          _userRating = userRating;
+          _isRatingLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching ratings in Detail Screen: $e');
+      if (mounted) {
+        setState(() => _isRatingLoading = false);
+      }
+    }
+  }
+
+
+  @override
+  void didUpdateWidget(MovieDetailScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update wishlist state if parent changes it
+    if (oldWidget.isInWishlist != widget.isInWishlist) {
+      _isInWishlist = widget.isInWishlist;
+    }
   }
 
   void _toggleWishlist() {
-    // Check if user is logged in
-    if (widget.userData == null || widget.userData!['isLoggedIn'] != 'true') {
+    // Check if user is logged in - FIXED: Check if userData exists and has email/username
+    if (widget.userData == null || 
+        (widget.userData!['email'] == null && widget.userData!['username'] == null)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please login to add movies to wishlist'),
@@ -98,6 +155,17 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                       child: Image.network(
                         widget.movie['detailImage'] ?? widget.movie['image'] ?? '',
                         fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            color: Colors.grey[900],
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.red,
+                              ),
+                            ),
+                          );
+                        },
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
                             color: Colors.grey[900],
@@ -152,13 +220,35 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                       const Icon(Icons.star, color: Colors.yellow, size: 20),
                       const SizedBox(width: 4),
                       Text(
-                        widget.movie['rating'] ?? 'N/A',
+                        _isRatingLoading 
+                            ? '...' 
+                            : _averageRating.toStringAsFixed(1),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                      if (!_isRatingLoading && _userRating > 0) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.yellow.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: Colors.yellow.withOpacity(0.5)),
+                          ),
+                          child: Text(
+                            'You: ${_userRating.toStringAsFixed(1)}',
+                            style: const TextStyle(
+                              color: Colors.yellow,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+
                     ],
                   ),
                   const SizedBox(width: 20),
@@ -199,7 +289,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: _isInWishlist ? Colors.red : Colors.transparent,
+                        color: _isInWishlist ? Colors.red.withOpacity(0.2) : Colors.transparent,
                         border: Border.all(
                           color: Colors.red,
                           width: 2,
@@ -284,37 +374,13 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
               const SizedBox(height: 30),
 
-              // Additional Info
-              const Text(
-                'Genre: Drama, Comedy',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Language: Nepali',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Director: Nepali Film Director',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Cast: Popular Nepali Actors',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
-                ),
+              // Rating & Comment System
+              RatingCommentSystem(
+                movieTitle: widget.movie['title'] ?? '',
+                userId: widget.userData?['email'] ?? widget.userData?['username'],
+                userEmail: widget.userData?['email'],
+                userToken: widget.userData?['token'],
+                userName: widget.userData?['username'],
               ),
 
               const SizedBox(height: 40),
@@ -396,6 +462,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     builder: (context) => MovieDetailScreen(
                       movie: similarMovie,
                       userData: widget.userData,
+                      isInWishlist: false, // You might want to pass actual wishlist state
+                      // onWishlistToggle: widget.onWishlistToggle, // Pass the callback if needed
                     ),
                   ),
                 );
@@ -411,6 +479,20 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                       width: 120,
                       height: 160,
                       fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Container(
+                          width: 120,
+                          height: 160,
+                          color: Colors.grey[900],
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.red,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        );
+                      },
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
                           width: 120,
@@ -448,13 +530,10 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     children: [
                       const Icon(Icons.star, color: Colors.yellow, size: 14),
                       const SizedBox(width: 3),
-                      Text(
-                        similarMovie['rating'] ?? 'N/A',
-                        style: const TextStyle(
-                          color: Colors.yellow,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      MovieRatingBadge(
+                        movieTitle: similarMovie['title'] ?? '',
+                        initialRating: similarMovie['rating'],
+                        fontSize: 12,
                       ),
                     ],
                   ),

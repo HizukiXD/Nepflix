@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'movie_detail_screen.dart';
+import 'widgets/movie_rating_badge.dart';
+
 
 class PopularMoviesScreen extends StatefulWidget {
   final Map<String, String>? userData;
@@ -530,15 +532,13 @@ class MovieCard extends StatelessWidget {
             children: [
               const Icon(Icons.star, color: Colors.yellow, size: 12),
               const SizedBox(width: 3),
-              Text(
-                movie['rating'] ?? 'N/A',
-                style: const TextStyle(
-                  color: Colors.yellow,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                ),
+              MovieRatingBadge(
+                movieTitle: movie['title'] ?? '',
+                initialRating: movie['rating'],
+                fontSize: 11,
               ),
               const SizedBox(width: 8),
+
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                 decoration: BoxDecoration(
