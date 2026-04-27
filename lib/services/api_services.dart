@@ -38,7 +38,7 @@ class ApiService {
       var response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"name": name, "email": email, "password": password}),
+        body: jsonEncode({"username": name, "email": email, "password": password}),
       );
       
       if (response.statusCode == 200 || response.statusCode == 201) {
